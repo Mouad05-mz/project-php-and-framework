@@ -1,0 +1,47 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Edit Donation{% endblock %}
+
+{% block body %}
+<div class="container animate-fade-in">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header bg-warning text-white">
+                    <h4 class="mb-0"><i class="fas fa-edit"></i> Edit Donation</h4>
+                </div>
+                <div class="card-body">
+                    <div class="alert alert-info">
+                        <strong>Donor:</strong> {{ donation.donor.firstName }} {{ donation.donor.lastName }}<br>
+                        <strong>Campaign:</strong> {{ donation.campaign.title }}<br>
+                        <strong>Original Amount:</strong> €{{ donation.amount|number_format(2) }}
+                    </div>
+
+                    {{ form_start(form) }}
+                        <div class="mb-3">
+                            {{ form_label(form.amount, 'Donation Amount (€)', {'label_attr': {'class': 'form-label'}}) }}
+                            {{ form_widget(form.amount, {'attr': {'class': 'form-control form-control-lg', 'placeholder': 'Enter amount in €'}}) }}
+                            {{ form_errors(form.amount) }}
+                        </div>
+
+                        <div class="mb-3">
+                            {{ form_label(form.message, 'Message (Optional)', {'label_attr': {'class': 'form-label'}}) }}
+                            {{ form_widget(form.message, {'attr': {'class': 'form-control', 'placeholder': 'Your support message...', 'rows': 3}}) }}
+                            {{ form_errors(form.message) }}
+                        </div>
+
+                        <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                            <a href="{{ path('app_donation') }}" class="btn btn-secondary">
+                                <i class="fas fa-times"></i> Cancel
+                            </a>
+                            <button type="submit" class="btn btn-custom">
+                                <i class="fas fa-save"></i> Update Donation
+                            </button>
+                        </div>
+                    {{ form_end(form) }}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

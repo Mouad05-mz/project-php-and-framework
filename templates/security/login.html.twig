@@ -1,0 +1,75 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Login - Charitable Donations Platform{% endblock %}
+
+{% block body %}
+<div class="container animate-fade-in">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card shadow">
+                <div class="card-header bg-primary text-white text-center">
+                    <h4 class="mb-0"><i class="fas fa-sign-in-alt"></i> Login to Your Account</h4>
+                </div>
+                <div class="card-body">
+                    {% if error %}
+                        <div class="alert alert-danger animate-fade-in">
+                            <i class="fas fa-exclamation-triangle"></i> {{ error.messageKey|trans(error.messageData, 'security') }}
+                        </div>
+                    {% endif %}
+
+                    {% if app.user %}
+                        <div class="alert alert-success">
+                            <i class="fas fa-check-circle"></i> You are logged in as {{ app.user.userIdentifier }}.
+                            <a href="{{ path('app_logout') }}" class="alert-link">Logout</a>
+                        </div>
+                    {% endif %}
+
+                    <form method="post">
+                        <div class="mb-3">
+                            <label for="inputEmail" class="form-label">
+                                <i class="fas fa-envelope"></i> Email Address
+                            </label>
+                            <input type="email" value="{{ last_username }}" name="email" id="inputEmail"
+                                   class="form-control form-control-lg" autocomplete="email" required autofocus
+                                   placeholder="Enter your email">
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="inputPassword" class="form-label">
+                                <i class="fas fa-lock"></i> Password
+                            </label>
+                            <input type="password" name="password" id="inputPassword"
+                                   class="form-control form-control-lg" autocomplete="current-password" required
+                                   placeholder="Enter your password">
+                        </div>
+
+                        <div class="mb-3 form-check">
+                            <input type="checkbox" name="_remember_me" class="form-check-input" id="rememberMe">
+                            <label class="form-check-label" for="rememberMe">
+                                <i class="fas fa-clock"></i> Remember me
+                            </label>
+                        </div>
+
+                        <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
+
+                        <div class="d-grid">
+                            <button class="btn btn-custom btn-lg" type="submit">
+                                <i class="fas fa-sign-in-alt"></i> Sign In
+                            </button>
+                        </div>
+                    </form>
+
+                    <hr class="my-4">
+
+                    <div class="text-center">
+                        <p class="mb-2">Don't have an account?</p>
+                        <a href="{{ path('app_register') }}" class="btn btn-outline-primary">
+                            <i class="fas fa-user-plus"></i> Create Account
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

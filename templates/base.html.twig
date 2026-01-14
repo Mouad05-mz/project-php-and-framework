@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="fr">
+    <head>
+        <meta charset="UTF-8">
+        <title>{% block title %}Charitable Donations Platform{% endblock %}</title>
+        <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 128 128%22><text y=%221.2em%22 font-size=%2296%22>⚫️</text><text y=%221.3em%22 x=%220.2em%22 font-size=%2276%22 fill=%22%23fff%22>sf</text></svg>">
+        <!-- Bootstrap CSS -->
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+        <!-- Bootswatch Theme: Minty (Elegant and Modern) -->
+        <link href="https://cdn.jsdelivr.net/npm/bootswatch@5.3.0/dist/minty/bootstrap.min.css" rel="stylesheet">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+        {% block stylesheets %}
+        <style>
+            body {
+                background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+                font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+                min-height: 100vh;
+            }
+            .navbar {
+                background: linear-gradient(135deg, #28a745 0%, #20c997 100%) !important;
+                box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+                border: none;
+                position: fixed !important;
+                top: 0;
+                width: 100%;
+                z-index: 1030;
+            }
+            .navbar-brand {
+                font-weight: bold;
+                font-size: 1.5rem;
+                color: white !important;
+            }
+            .navbar-brand:hover {
+                color: #f8f9fa !important;
+            }
+            .sidebar {
+                background: linear-gradient(180deg, #343a40 0%, #495057 100%);
+                color: white;
+                min-height: 100vh;
+                box-shadow: 2px 0 5px rgba(0,0,0,0.1);
+                position: fixed;
+                top: 56px;
+                left: 0;
+                width: 250px;
+                z-index: 1020;
+                transition: transform 0.3s ease;
+                padding-top: 20px;
+            }
+            .sidebar.collapsed {
+                transform: translateX(-250px);
+            }
+            .sidebar a {
+                color: #adb5bd;
+                text-decoration: none;
+                padding: 15px 20px;
+                display: block;
+                transition: all 0.3s ease;
+                border-radius: 5px;
+                margin: 5px 10px;
+            }
+            .sidebar a:hover {
+                background-color: #495057;
+                color: white;
+                transform: translateX(5px);
+            }
+            .sidebar a.active {
+                background-color: #28a745;
+                color: white;
+                border-left: 4px solid #20c997;
+            }
+            .main-content {
+                margin-left: 250px;
+                padding: 30px;
+                transition: margin-left 0.3s ease;
+                margin-top: 76px;
+            }
+            .main-content.expanded {
+                margin-left: 0;
+            }
+            .card {
+                border: none;
+                border-radius: 15px;
+                box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+                transition: transform 0.3s ease, box-shadow 0.3s ease;
+                overflow: hidden;
+            }
+            .card:hover {
+                transform: translateY(-5px);
+                box-shadow: 0 15px 35px rgba(0,0,0,0.15);
+            }
+            .hero {
+                background: linear-gradient(135deg, rgba(40, 167, 69, 0.9) 0%, rgba(32, 201, 151, 0.9) 100%),
+                           url('https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?w=1920&h=600&fit=crop&crop=center') no-repeat center center;
+                background-size: cover;
+                color: white;
+                padding: 150px 0 120px;
+                text-align: center;
+                position: relative;
+                margin-top: 56px;
+                overflow: hidden;
+            }
+            .hero h1 {
+                font-family: 'Georgia', serif;
+                font-size: 3.5rem;
+                font-weight: 700;
+                text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+                margin-bottom: 1rem;
+            }
+            .hero p {
+                font-size: 1.3rem;
+                font-weight: 300;
+                text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+                max-width: 600px;
+                margin: 0 auto 2rem;
+            }
+            .hero .btn {
+                font-weight: 600;
+                padding: 12px 30px;
+                border-radius: 50px;
+                text-transform: uppercase;
+                letter-spacing: 1px;
+                box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+                transition: all 0.3s ease;
+            }
+            .hero .btn:hover {
+                transform: translateY(-2px);
+                box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+            }
+                opacity: 0.3;
+                z-index: 1;
+            }
+            .hero .container {
+                position: relative;
+                z-index: 2;
+            }
+            .btn-custom {
+                background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+                border: none;
+                border-radius: 25px;
+                padding: 12px 30px;
+                font-weight: bold;
+                transition: all 0.3s ease;
+            }
+            .btn-custom:hover {
+                transform: scale(1.05);
+                box-shadow: 0 5px 15px rgba(40, 167, 69, 0.4);
+            }
+            .stats-card {
+                background: linear-gradient(135deg, #fff 0%, #f8f9fa 100%);
+                border-radius: 15px;
+                padding: 20px;
+                text-align: center;
+                margin-bottom: 20px;
+            }
+            .stats-card i {
+                font-size: 2rem;
+                color: #28a745;
+                margin-bottom: 10px;
+            }
+            .progress {
+                height: 10px;
+                border-radius: 5px;
+            }
+            .footer {
+                background: #343a40;
+                color: white;
+                text-align: center;
+                padding: 20px 0;
+                margin-top: 50px;
+            }
+            .sidebar-toggle {
+                display: none;
+                background: none;
+                border: none;
+                color: white;
+                font-size: 1.5rem;
+                margin-right: 15px;
+            }
+            @media (max-width: 768px) {
+                .sidebar {
+                    transform: translateX(-250px);
+                }
+                .main-content {
+                    margin-left: 0;
+                }
+                .sidebar-toggle {
+                    display: block;
+                }
+            }
+            .animate-fade-in {
+                animation: fadeIn 1s ease-in;
+            }
+            @keyframes fadeIn {
+                from { opacity: 0; transform: translateY(20px); }
+                to { opacity: 1; transform: translateY(0); }
+            }
+
+            /* Dark Mode Styles */
+            .dark-mode {
+                background-color: #121212 !important;
+                color: #ffffff !important;
+            }
+
+            .dark-mode .card {
+                background-color: #1e1e1e !important;
+                color: #ffffff !important;
+                border-color: #333 !important;
+            }
+
+            .dark-mode .navbar {
+                background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%) !important;
+            }
+
+            .dark-mode .sidebar {
+                background: linear-gradient(180deg, #1a1a1a 0%, #2d2d2d 100%) !important;
+            }
+
+            .dark-mode .btn-custom {
+                background-color: #007bff !important;
+                border-color: #007bff !important;
+            }
+
+            .dark-mode .btn-custom:hover {
+                background-color: #0056b3 !important;
+                border-color: #0056b3 !important;
+            }
+
+            .dark-mode .hero {
+                background: linear-gradient(135deg, rgba(26, 26, 26, 0.9) 0%, rgba(45, 45, 45, 0.9) 100%),
+                           url('https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?w=1920&h=600&fit=crop&crop=center') no-repeat center center !important;
+            }
+
+            .dark-mode .table {
+                color: #ffffff !important;
+            }
+
+            .dark-mode .table thead th {
+                background-color: #2d2d2d !important;
+                border-color: #333 !important;
+            }
+
+            .dark-mode .form-control {
+                background-color: #2d2d2d !important;
+                border-color: #333 !important;
+                color: #ffffff !important;
+            }
+
+            .dark-mode .form-control:focus {
+                background-color: #2d2d2d !important;
+                border-color: #007bff !important;
+                color: #ffffff !important;
+            }
+        </style>
+        {% endblock %}
+
+        {% block javascripts %}
+            <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+            {% block importmap %}{{ importmap('app') }}{% endblock %}
+            <script>
+                function toggleSidebar() {
+                    const sidebar = document.querySelector('.sidebar');
+                    const mainContent = document.querySelector('.main-content');
+                    sidebar.classList.toggle('collapsed');
+                    mainContent.classList.toggle('expanded');
+                }
+
+                // Dark mode functionality
+                document.addEventListener('DOMContentLoaded', function() {
+                    const body = document.body;
+                    const isDarkMode = body.getAttribute('data-dark-mode') === 'true';
+
+                    if (isDarkMode) {
+                        body.classList.add('dark-mode');
+                    }
+
+                    // Handle dark mode toggle on settings page
+                    const darkModeToggle = document.getElementById('darkMode');
+                    if (darkModeToggle) {
+                        darkModeToggle.addEventListener('change', function() {
+                            if (this.checked) {
+                                body.classList.add('dark-mode');
+                            } else {
+                                body.classList.remove('dark-mode');
+                            }
+                        });
+                    }
+                });
+            </script>
+        {% endblock %}
+    </head>
+    <body data-dark-mode="{{ app.session.get('dark_mode', false) ? 'true' : 'false' }}">
+        <!-- Top Navbar -->
+        <nav class="navbar navbar-expand-lg navbar-dark">
+            <div class="container-fluid">
+                <button class="sidebar-toggle" onclick="toggleSidebar()"><i class="fas fa-bars"></i></button>
+                <a class="navbar-brand animate-fade-in" href="{{ path('app_home') }}">
+                    <i class="fas fa-heartbeat"></i> Charitable Donations
+                </a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav ms-auto">
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ path('app_home') }}"><i class="fas fa-home"></i> Home</a>
+                        </li>
+                        {% if app.user %}
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ path('app_donor') }}"><i class="fas fa-users"></i> Donors</a>
+                            </li>
+                            {% if is_granted('ROLE_ADMIN') %}
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown">
+                                    <i class="fas fa-cogs"></i> Management
+                                </a>
+                                <ul class="dropdown-menu">
+                                    <li><a class="dropdown-item" href="{{ path('app_campaign_new') }}"><i class="fas fa-plus"></i> New Campaign</a></li>
+                                    <li><a class="dropdown-item" href="{{ path('app_statistics') }}"><i class="fas fa-chart-line"></i> Statistics</a></li>
+                                    <li><hr class="dropdown-divider"></li>
+                                    <li><a class="dropdown-item" href="{{ path('app_settings') }}"><i class="fas fa-cog"></i> Settings</a></li>
+                                </ul>
+                            </li>
+                            {% endif %}
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ path('app_logout') }}"><i class="fas fa-sign-out-alt"></i> Logout</a>
+                            </li>
+                        {% else %}
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ path('app_login') }}"><i class="fas fa-sign-in-alt"></i> Login</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ path('app_register') }}"><i class="fas fa-user-plus"></i> Register</a>
+                            </li>
+                        {% endif %}
+                    </ul>
+                </div>
+            </div>
+        </nav>
+
+        <div class="container-fluid">
+            <div class="row">
+                <!-- Sidebar -->
+                <nav class="col-md-2 d-none d-md-block sidebar">
+                    <div class="sidebar-sticky pt-3">
+                        <ul class="nav flex-column">
+                            <li class="nav-item">
+                                <a class="nav-link {{ app.request.get('_route') == 'app_home' ? 'active' : '' }}" href="{{ path('app_home') }}">
+                                    <i class="fas fa-tachometer-alt"></i> <span>Dashboard</span>
+                                </a>
+                            </li>
+                            {% if app.user %}
+                                <li class="nav-item">
+                                    <a class="nav-link {{ app.request.get('_route') starts with 'app_campaign' ? 'active' : '' }}" href="{{ path('app_home') }}">
+                                        <i class="fas fa-bullhorn"></i> <span>Campaigns</span>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link {{ app.request.get('_route') == 'app_donor' ? 'active' : '' }}" href="{{ path('app_donor') }}">
+                                        <i class="fas fa-user-friends"></i> <span>Donors</span>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link {{ app.request.get('_route') starts with 'app_donation' ? 'active' : '' }}" href="{{ path('app_donation') }}">
+                                        <i class="fas fa-hand-holding-heart"></i> <span>Donations</span>
+                                    </a>
+                                </li>
+                                {% if is_granted('ROLE_ADMIN') %}
+                                <li class="nav-item">
+                                    <a class="nav-link {{ app.request.get('_route') == 'app_statistics' ? 'active' : '' }}" href="{{ path('app_statistics') }}">
+                                        <i class="fas fa-chart-bar"></i> <span>Statistics</span>
+                                    </a>
+                                </li>
+                                {% endif %}
+                                <li class="nav-item">
+                                    <a class="nav-link {{ app.request.get('_route') == 'app_messages' ? 'active' : '' }}" href="{{ path('app_messages') }}">
+                                        <i class="fas fa-envelope"></i> <span>Messages</span>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link {{ app.request.get('_route') == 'app_faq' ? 'active' : '' }}" href="{{ path('app_faq') }}">
+                                        <i class="fas fa-question-circle"></i> <span>FAQ</span>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link {{ app.request.get('_route') == 'app_support' ? 'active' : '' }}" href="{{ path('app_support') }}">
+                                        <i class="fas fa-life-ring"></i> <span>Support</span>
+                                    </a>
+                                </li>
+                            {% else %}
+                                <li class="nav-item">
+                                    <a class="nav-link {{ app.request.get('_route') == 'app_login' ? 'active' : '' }}" href="{{ path('app_login') }}">
+                                        <i class="fas fa-sign-in-alt"></i> <span>Login</span>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link {{ app.request.get('_route') == 'app_register' ? 'active' : '' }}" href="{{ path('app_register') }}">
+                                        <i class="fas fa-user-plus"></i> <span>Register</span>
+                                    </a>
+                                </li>
+                            {% endif %}
+                        </ul>
+                        {% if app.user %}
+                            <hr>
+                            <div class="px-3">
+                                <p class="text-white-50 small mb-1">Welcome back!</p>
+                                <p class="text-white small mb-0">{{ app.user.email }}</p>
+                            </div>
+                        {% endif %}
+                    </div>
+                </nav>
+                            <h6 class="text-muted">Aide & Support</h6>
+                            <a class="nav-link" href="{{ path('app_faq') }}">
+                                <i class="fas fa-question-circle"></i> <span>FAQ</span>
+                            </a>
+                            <a class="nav-link" href="{{ path('app_support') }}">
+                                <i class="fas fa-headset"></i> <span>Contact</span>
+                            </a>
+                        </div>
+                    </div>
+                </nav>
+
+                <!-- Main Content -->
+                <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4 main-content">
+                    {% block body %}{% endblock %}
+                </main>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <div class="container">
+                <p>&copy; 2026 Charitable Donations Platform. All rights reserved. <i class="fas fa-heart text-danger"></i></p>
+            </div>
+        </footer>
+    </body>
+</html>

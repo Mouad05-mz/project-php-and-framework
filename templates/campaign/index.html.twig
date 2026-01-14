@@ -1,0 +1,88 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Dashboard - Charity Donation Platform{% endblock %}
+
+{% block body %}
+<div class="hero animate-fade-in">
+    <div class="container">
+        <h1 class="display-4">Welcome to the Charity Donation Platform</h1>
+        <p class="lead">Help us make a difference. Discover our campaigns and make a donation today.</p>
+        <a class="btn btn-light btn-lg btn-custom" href="#campaigns">View Campaigns</a>
+        {% if is_granted('ROLE_ADMIN') %}
+            <a class="btn btn-primary btn-lg ms-2" href="{{ path('app_campaign_new') }}">
+                <i class="fas fa-plus"></i> Create Campaign
+            </a>
+        {% endif %}
+    </div>
+</div>
+
+<div class="container mt-5">
+    {% for message in app.flashes('success') %}
+        <div class="alert alert-success alert-dismissible fade show animate-fade-in" role="alert">
+            <i class="fas fa-check-circle"></i> {{ message }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    {% endfor %}
+
+    <h2 class="mb-4 text-center"><i class="fas fa-chart-pie"></i> Global Statistics</h2>
+    <div class="row">
+        <div class="col-md-3">
+            <div class="stats-card animate-fade-in">
+                <i class="fas fa-bullhorn"></i>
+                <h5 class="card-title">{{ campaigns|length }}</h5>
+                <p class="card-text">Active Campaigns</p>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="stats-card animate-fade-in">
+                <i class="fas fa-hand-holding-heart"></i>
+                <h5 class="card-title">€{{ totalCollected|number_format(2) }}</h5>
+                <p class="card-text">Total Collected</p>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="stats-card animate-fade-in">
+                <i class="fas fa-users"></i>
+                <h5 class="card-title">{{ totalDonors }}</h5>
+                <p class="card-text">Donors</p>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="stats-card animate-fade-in">
+                <i class="fas fa-chart-line"></i>
+                <h5 class="card-title">{{ totalDonations }}</h5>
+                <p class="card-text">Donations Made</p>
+            </div>
+        </div>
+    </div>
+
+    <h2 id="campaigns" class="mt-5 mb-4 text-center"><i class="fas fa-bullhorn"></i> Active Campaigns</h2>
+    <div class="row">
+        {% for campaign in campaigns %}
+        <div class="col-md-4 mb-4">
+            <div class="card h-100 animate-fade-in">
+                <img src="https://picsum.photos/300/200?random={{ loop.index }}" class="card-img-top" alt="{{ campaign.title }}" style="height: 200px; object-fit: cover;">
+                <div class="card-body">
+                    <h5 class="card-title">{{ campaign.title }}</h5>
+                    <p class="card-text">{{ campaign.description|slice(0, 100) }}...</p>
+                    <div class="progress mb-2">
+                        <div class="progress-bar bg-success" role="progressbar" style="width: {{ (campaign.currentAmount / campaign.goalAmount * 100)|round }}%" aria-valuenow="{{ campaign.currentAmount }}" aria-valuemin="0" aria-valuemax="{{ campaign.goalAmount }}"></div>
+                    </div>
+                    <p class="mb-1"><strong>Collected:</strong> €{{ campaign.currentAmount|number_format(2) }} / €{{ campaign.goalAmount|number_format(2) }}</p>
+                    <p class="text-muted"><i class="fas fa-calendar"></i> Status: {{ campaign.status }}</p>
+                    <div class="d-grid gap-2">
+                        <a href="{{ path('app_donation_new', {'campaign': campaign.id}) }}" class="btn btn-custom">Make a Donation</a>
+                        {% if is_granted('ROLE_ADMIN') %}
+                            <div class="btn-group w-100" role="group">
+                                <a href="{{ path('app_campaign_show', {'id': campaign.id}) }}" class="btn btn-outline-primary">View Details</a>
+                                <a href="{{ path('app_campaign_edit', {'id': campaign.id}) }}" class="btn btn-outline-warning">Edit</a>
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

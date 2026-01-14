@@ -1,0 +1,66 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}List of Donations{% endblock %}
+
+{% block body %}
+<div class="container animate-fade-in">
+    <h1 class="mb-4 text-center"><i class="fas fa-hand-holding-heart"></i> List of Donations</h1>
+
+    {% for message in app.flashes('success') %}
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            <i class="fas fa-check-circle"></i> {{ message }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    {% endfor %}
+
+    <div class="card">
+        <div class="card-header bg-success text-white">
+            <h5 class="mb-0"><i class="fas fa-list"></i> All Donations Made</h5>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-striped table-hover">
+                    <thead class="table-success">
+                        <tr>
+                            <th><i class="fas fa-hashtag"></i> ID</th>
+                            <th><i class="fas fa-euro-sign"></i> Amount</th>
+                            <th><i class="fas fa-calendar"></i> Date</th>
+                            <th><i class="fas fa-user"></i> Donor</th>
+                            <th><i class="fas fa-bullhorn"></i> Campaign</th>
+                            <th><i class="fas fa-comment"></i> Message</th>
+                            <th><i class="fas fa-cogs"></i> Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for donation in donations %}
+                        <tr>
+                            <td>{{ donation.id }}</td>
+                            <td>€{{ donation.amount|number_format(2) }}</td>
+                            <td>{{ donation.date|date('d/m/Y H:i') }}</td>
+                            <td>{{ donation.donor.firstName }} {{ donation.donor.lastName }}</td>
+                            <td>{{ donation.campaign.title }}</td>
+                            <td>{{ donation.message ?: '<span class="text-muted">None</span>'|raw }}</td>
+                            <td>
+                                <a href="{{ path('app_donation_edit', {'id': donation.id}) }}" class="btn btn-sm btn-warning me-1">
+                                    <i class="fas fa-edit"></i> Edit
+                                </a>
+                                <form method="post" action="{{ path('app_donation_delete', {'id': donation.id}) }}" class="d-inline"
+                                      onsubmit="return confirm('Are you sure you want to delete this donation?');">
+                                    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ donation.id) }}">
+                                    <button class="btn btn-sm btn-danger">
+                                        <i class="fas fa-trash"></i> Delete
+                                    </button>
+                                </form>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div class="text-center mt-4">
+        <a href="{{ path('app_home') }}" class="btn btn-custom"><i class="fas fa-arrow-left"></i> Back to Dashboard</a>
+    </div>
+</div>
+{% endblock %}

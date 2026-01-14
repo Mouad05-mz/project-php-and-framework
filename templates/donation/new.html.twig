@@ -1,0 +1,54 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Make a Donation{% endblock %}
+
+{% block body %}
+<div class="container animate-fade-in">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header bg-primary text-white">
+                    <h4 class="mb-0"><i class="fas fa-hand-holding-heart"></i> Make a Donation to {{ campaign.title }}</h4>
+                </div>
+                <div class="card-body">
+                    <div class="alert alert-info animate-fade-in">
+                        <h5><i class="fas fa-info-circle"></i> Campaign Details</h5>
+                        <strong>Campaign:</strong> {{ campaign.title }}<br>
+                        <strong>Description:</strong> Help support this important cause by making a donation today. Your contribution will make a real difference in the community.<br>
+                        <strong>Goal:</strong> €{{ campaign.goalAmount|number_format(2) }}<br>
+                        <strong>Already Collected:</strong> €{{ campaign.currentAmount|number_format(2) }}
+                        <div class="progress mt-2">
+                            <div class="progress-bar bg-success" role="progressbar" style="width: {{ (campaign.currentAmount / campaign.goalAmount * 100)|round }}%"></div>
+                        </div>
+                    </div>
+                    {{ form_start(form) }}
+                        <div class="mb-3">
+                            {{ form_label(form.amount, 'Donation Amount (€)', {'label_attr': {'class': 'form-label'}}) }}
+                            {{ form_widget(form.amount, {'attr': {'class': 'form-control form-control-lg', 'placeholder': 'Enter amount in €'}}) }}
+                            {{ form_errors(form.amount) }}
+                        </div>
+                        <div class="mb-3">
+                            {{ form_label(form.message, 'Message (Optional)', {'label_attr': {'class': 'form-label'}}) }}
+                            {{ form_widget(form.message, {'attr': {'class': 'form-control', 'placeholder': 'Your support message...', 'rows': 3}}) }}
+                            {{ form_errors(form.message) }}
+                        </div>
+                        <div class="mb-3">
+                            {{ form_label(form.donor, 'Select a Donor', {'label_attr': {'class': 'form-label'}}) }}
+                            {{ form_widget(form.donor, {'attr': {'class': 'form-select form-select-lg'}}) }}
+                            {{ form_errors(form.donor) }}
+                        </div>
+                        <div class="d-grid">
+                            <button type="submit" class="btn btn-custom btn-lg">
+                                <i class="fas fa-paper-plane"></i> Make Donation
+                            </button>
+                        </div>
+                    {{ form_end(form) }}
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="text-center mt-3">
+        <a href="{{ path('app_home') }}" class="btn btn-secondary btn-custom"><i class="fas fa-arrow-left"></i> Back to Dashboard</a>
+    </div>
+</div>
+{% endblock %}

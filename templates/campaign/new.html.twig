@@ -1,0 +1,65 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Create New Campaign{% endblock %}
+
+{% block body %}
+<div class="container animate-fade-in">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header bg-primary text-white">
+                    <h4 class="mb-0"><i class="fas fa-plus"></i> Create New Campaign</h4>
+                </div>
+                <div class="card-body">
+                    {{ form_start(form) }}
+                        <div class="mb-3">
+                            {{ form_label(form.title, 'Campaign Title', {'label_attr': {'class': 'form-label'}}) }}
+                            {{ form_widget(form.title, {'attr': {'class': 'form-control form-control-lg', 'placeholder': 'Enter an engaging title for your campaign'}}) }}
+                            {{ form_errors(form.title) }}
+                        </div>
+
+                        <div class="mb-3">
+                            {{ form_label(form.description, 'Campaign Description', {'label_attr': {'class': 'form-label'}}) }}
+                            {{ form_widget(form.description, {'attr': {'class': 'form-control', 'rows': 4, 'placeholder': 'Describe your campaign goals and how donations will be used'}}) }}
+                            {{ form_errors(form.description) }}
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    {{ form_label(form.goalAmount, 'Goal Amount (€)', {'label_attr': {'class': 'form-label'}}) }}
+                                    {{ form_widget(form.goalAmount, {'attr': {'class': 'form-control', 'placeholder': '5000.00'}}) }}
+                                    {{ form_errors(form.goalAmount) }}
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="mb-3">
+                                    {{ form_label(form.startDate, 'Start Date', {'label_attr': {'class': 'form-label'}}) }}
+                                    {{ form_widget(form.startDate, {'attr': {'class': 'form-control'}}) }}
+                                    {{ form_errors(form.startDate) }}
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="mb-3">
+                                    {{ form_label(form.endDate, 'End Date', {'label_attr': {'class': 'form-label'}}) }}
+                                    {{ form_widget(form.endDate, {'attr': {'class': 'form-control'}}) }}
+                                    {{ form_errors(form.endDate) }}
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="d-grid">
+                            <button type="submit" class="btn btn-custom btn-lg">
+                                <i class="fas fa-save"></i> Create Campaign
+                            </button>
+                        </div>
+                    {{ form_end(form) }}
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="text-center mt-3">
+        <a href="{{ path('app_home') }}" class="btn btn-custom"><i class="fas fa-arrow-left"></i> Back to Dashboard</a>
+    </div>
+</div>
+{% endblock %}
